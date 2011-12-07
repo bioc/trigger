@@ -549,7 +549,7 @@ find.cis.genes<-function(out.em, cross, chr.s, marker, marker.pos, exp, exp.pos,
   
   out.em.s = summary(out.em)
   n.sig = length(unique(out.em.s$chr))
-  pos.s = as.numeric(max.scanone(out.em, chr = chr.s)$pos)
+  pos.s = as.numeric(max(out.em, chr = chr.s)$pos)
   int.bayes = bayesint(out.em, chr.s, 0.95)
   int.lod = lodint(out.em, chr.s, 1.5)
   int.comb = rbind(int.bayes, int.lod)
