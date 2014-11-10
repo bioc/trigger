@@ -36,7 +36,9 @@ link.stat.c <- function(exp, genotype, gender=NULL) {
     lik0 <- double(1)
     lik1 <- double(1)
                                         #.C("link_stat", ni, trait, geno2, ng, lik0, lik1, DUP=FALSE, PACKAGE="trigger")
-    .C("link_stat", ni, trait, geno2, ng, lik0, lik1, DUP=FALSE)
+    out <- .C("link_stat", ni, trait, geno2, ng, lik0, lik1, DUP=TRUE)
+    lik0 <- out[[5]]
+    lik1 <- out[[6]]
     oo <- cbind(oo, c(lik0, lik1))
   }
   foo <- n*log(rowSums(oo))
@@ -68,8 +70,11 @@ link.stat.xx.c <- function(exp, genotype, gender=NULL) {
     lik1 <- double(nexp*ngeno)
     
 #.C("link_stat_xx", ni , nexp, trait, ngeno,geno2, ng, lik0, lik1, DUP=FALSE, PACKAGE="trigger")
-    .C("link_stat_xx", ni , nexp, trait, ngeno,
-       geno2, ng, lik0, lik1, DUP=FALSE)
+    
+    out <- .C("link_stat_xx", ni , nexp, trait, ngeno,
+       geno2, ng, lik0, lik1, DUP=TRUE)
+    lik0 <- out[[7]]
+    lik1 <- out[[8]]
     oo <- cbind(oo, c(lik0, lik1))
     
   }
@@ -100,8 +105,10 @@ sec.link.stat.c <- function(exp, cisexp, genotype, gender=NULL) {
     storage.mode(trait) <- storage.mode(cistrait) <- "double"
     storage.mode(geno2) <- "integer"
 		#.C("sec_link_stat", ni, trait, cistrait,geno2, ng, lik0, lik1, DUP=FALSE, PACKAGE="trigger")
-    .C("sec_link_stat", ni, trait, cistrait,
-       geno2, ng, lik0, lik1, DUP=FALSE)
+    out <- .C("sec_link_stat", ni, trait, cistrait,
+       geno2, ng, lik0, lik1, DUP=TRUE)
+    lik0 <- out[[6]]
+    lik1 <- out[[7]]
     oo <- cbind(oo, c(lik0, lik1))
   }
   foo <- n*log(rowSums(oo))
@@ -132,7 +139,9 @@ sec.link.stat.x.c <- function(exp, cisexp, genotype, gender=NULL) {
     lik1 <- double(nexp)
     
 #.C("sec_link_stat_x", ni, nexp,trait, cistrait, geno2, ng, lik0, lik1, DUP=FALSE, PACKAGE="trigger")
-    .C("sec_link_stat_x", ni, nexp, trait, cistrait, geno2, ng, lik0, lik1, DUP=FALSE)
+    out <- .C("sec_link_stat_x", ni, nexp, trait, cistrait, geno2, ng, lik0, lik1, DUP=TRUE)
+    lik0 <- out[[7]]
+    lik1 <- out[[8]]
     oo <- cbind(oo, c(lik0, lik1))
     
   }
@@ -162,8 +171,9 @@ condi.indep.stat.c <- function(exp, cisexp, genotype, gender=NULL) {
     storage.mode(trait) <- storage.mode(cistrait) <- "double"
     storage.mode(geno2) <- "integer"
 #.C("condi_indep_stat", ni, trait, cistrait,geno2, ng, r, DUP=FALSE, PACKAGE="trigger")
-    .C("condi_indep_stat", ni, trait, cistrait,
-       geno2, ng, r, DUP=FALSE)
+    out <- .C("condi_indep_stat", ni, trait, cistrait,
+       geno2, ng, r, DUP=TRUE)
+    r <- out[[6]]
     oo <- oo + r
   }
   return(oo)
@@ -190,8 +200,9 @@ condi.indep.stat.x.c <- function(exp, cisexp, genotype, gender=NULL) {
     storage.mode(geno2) <- "integer"
     r <- double(nexp)		
 #.C("condi_indep_stat_x", ni, nexp,trait, cistrait, geno2, ng, r, DUP=FALSE, PACKAGE="trigger")
-    .C("condi_indep_stat_x", ni, nexp,
-       trait, cistrait, geno2, ng, r, DUP=FALSE)
+    out <- .C("condi_indep_stat_x", ni, nexp,
+       trait, cistrait, geno2, ng, r, DUP=TRUE)
+    r <- out[[7]]
     oo <- oo+ r
   }
   return(oo)
@@ -217,8 +228,9 @@ condi.indep.stat.rx.c <- function(exp, cisexp, genotype, gender=NULL) {
     storage.mode(trait) <- storage.mode(cistrait) <- "double"
     storage.mode(geno2) <- "integer"
     r <- double(nexp)		
-    .C("condi_indep_stat_rx", ni, nexp,
-       trait, cistrait, geno2, ng, r, DUP=FALSE, PACKAGE = "trigger")
+    out <- .C("condi_indep_stat_rx", ni, nexp,
+       trait, cistrait, geno2, ng, r, DUP=TRUE, PACKAGE = "trigger")
+    r <- out[[7]]
     oo <- oo+ r
   }
   return(oo)
@@ -467,7 +479,8 @@ order.c <- function(x) {
   out <- integer(length(x))
   storage.mode(x) <- "double"
 #.C("order_c",x,as.integer(length(x)),out,DUP=FALSE, PACKAGE="trigger")
-  .C("order_c",x,as.integer(length(x)),out,DUP=FALSE)
+  hold <- .C("order_c",x,as.integer(length(x)),out,DUP=TRUE)
+  out <- hold[[3]]
   return(out)
 }
 
@@ -478,7 +491,8 @@ mergeorder.c <- function(x1, x2) {
   n2<-as.integer(length(x2))
   out<-integer(n1+n2)
 #.C("mergeorder",n1,x1,n2,x2,out,DUP=FALSE, PACKAGE="trigger")
-  .C("mergeorder",n1,x1,n2,x2,out,DUP=FALSE)
+  hold <- .C("mergeorder",n1,x1,n2,x2,out,DUP=TRUE)
+  out <- hold[[5]]
   return(out)
 }
 
@@ -635,7 +649,7 @@ traitmap.fun <- function(exp, trait, cis.list, markermorph, B= 5, norm=TRUE, df0
     oo <- condi.indep.stat.rx.c(exp = trait.null, cisexp = exp,  genotype = qtl)
     stat0 = c(stat0, oo)
   }
-  ps <- unlist(lapply(condi, function(x,stat0){ mean(stat0<=x)} , stat0=stat0),use.name=FALSE)[as.numeric(cis.list[,2])]
+  ps <- unlist(lapply(condi, function(x,stat0){ mean(stat0<=x)} , stat0=stat0),use.names=FALSE)[as.numeric(cis.list[,2])]
   names(ps) = cis.list[, 3]
 #ps.list[[cis.list[i ,3]]] <- ps
   
