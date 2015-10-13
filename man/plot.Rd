@@ -1,16 +1,17 @@
 \name{plot}
 \alias{plot}
-\alias{plot,trigger-method}
+\alias{plot,trigger,missing-method}
 \title{Graphical Display of Trigger Analysis}
 \description{
 Graphical display of genomewide linkage map, multi-locus linkage or eQTL variation
 }
 \usage{
-	\S4method{plot}{trigger}(x,type = c("link", "mlink", "eqtl"),
+	\S4method{plot}{trigger,missing}(x,y,type = c("link", "mlink", "eqtl"),
 				cutoff  = 3.3e-4, qcut = 0.1, bin.size = NULL)
 }
 \arguments{
-	\item{x}{triggerobj}{An object of class \code{\linkS4class{trigger}}.}
+	\item{x}{An object of class \code{\linkS4class{trigger}}.}
+  \item{y}{Ignore option, not used.}
  	\item{type}{An argument describing the type of plot. Select from \code{link} (default) for genome-wide linkage map, \code{eqtl.R2} for graphical display of eQTL-R^2 contribution or \code{mlink} for display of genome-wide epistasis effect.}
   	\item{cutoff}{Threshold value for \code{link}. The measures below the threshold are called significant and are plotted. }
   	\item{qcut}{Q-value threshold for \code{mlink}. The joint multi-locus linkage probabilities with q-values below the threshold are called significant and are plotted. }

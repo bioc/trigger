@@ -9,7 +9,7 @@ importFrom(stats, cor, density, dnorm, lsfit, model.matrix, pchisq,
           predict, pt, qnorm, sd, smooth.spline)
 importFrom(utils, write.table)
 importFrom(sva, sva, twostepsva.build)
-
+import(corpcor, qtl)
 # Class Trigger
 exportMethods(
 "trigger.link",

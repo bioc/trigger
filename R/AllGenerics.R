@@ -56,9 +56,9 @@ setMethod("show", "trigger",
 		cat("Expression matrix with ", nrow(object@exp), "rows and ", ncol(object@exp), "columns \n")
 	}
 )
-
-setMethod("plot", signature = "trigger", 
- function(x, type = c("link", "mlink", "eqtl"), cutoff = 3.3e-4, qcut = 0.1, bin.size = NULL) {
+setGeneric("plot")
+setMethod("plot", signature = c("trigger", "missing"), 
+ function(x, y, type = c("link", "mlink", "eqtl"), cutoff = 3.3e-4, qcut = 0.1, bin.size = NULL) {
     if(type ==  "eigenR2"){
 		eqtlPlot(x)
 	} else if(type ==  "link"){
