@@ -2,7 +2,7 @@ Package: trigger
 Type: Package
 Title: Transcriptional Regulatory Inference from Genetics of Gene
         ExpRession
-Version: 1.37.0
+Version: 1.38.0
 Author: Lin S. Chen <lchen@health.bsd.uchicago.edu>, Dipen P. Sangurdekar <dps@genomics.princeton.edu> and John D. Storey <jstorey@princeton.edu>
 Maintainer: John D. Storey <jstorey@princeton.edu>
 Depends: R (>= 2.14.0), corpcor, qtl
